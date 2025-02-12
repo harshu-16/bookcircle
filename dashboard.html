@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Book Circle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: #f3f4f6;
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: white;
+            padding: 1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: #1a365d;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .header-icon {
+            color: #4a5568;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #e53e3e;
+            color: white;
+            border-radius: 50%;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .genres {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .genres-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .genre-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .genre-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .genre-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #2563eb;
+        }
+
+        .show-more {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .show-more button {
+            background: none;
+            border: none;
+            color: #2563eb;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .book-card {
+            background: white;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .book-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .book-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .book-info {
+            padding: 1rem;
+        }
+
+        .book-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .book-price {
+            color: #2563eb;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 0.5rem;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .add-to-cart:hover {
+            background-color: #1d4ed8;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 1rem;
+            box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-around;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #4a5568;
+            text-decoration: none;
+            font-size: 0.875rem;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .nav-item i {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-item.active {
+            opacity: 1;
+            color: #2563eb;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-icon {
+            width: 35px;
+            height: 35px;
+            background-color: #e5e7eb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4b5563;
+        }
+
+        .search-container {
+            max-width: 800px;
+            margin: 1rem auto;
+            padding: 0 1rem;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            padding: 0.5rem;
+            margin: 0 0.5rem;
+            font-size: 1rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+        }
+
+        .search-icon {
+            color: #6b7280;
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+
+        .search-icon:hover {
+            color: #2563eb;
+        }
+
+        .hidden-book {
+            display: none;
+        }
+
+        .page-content {
+            display: none;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        .hidden-genre {
+            display: none;
+        }
+
+        .order-card {
+            background: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-image {
+            width: 80px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 0.25rem;
+        }
+
+        .order-details {
+            flex: 1;
+        }
+
+        .order-status {
+            color: #059669;
+            font-weight: 600;
+        }
+
+        .offer-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            border: 2px dashed #2563eb;
+            text-align: center;
+        }
+
+        .offer-title {
+            color: #2563eb;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .offer-description {
+            color: #4b5563;
+            margin-bottom: 1rem;
+        }
+
+        .offer-code {
+            background: #f3f4f6;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-family: monospace;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <div class="user-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <a href="#" class="logo">BookCircle</a>
+            </div>
+            <div class="header-icons">
+                <a href="#" class="header-icon">
+                    <i class="far fa-heart"></i>
+                    <span class="badge">2</span>
+                </a>
+                <a href="#" class="header-icon">
+                    <i class="far fa-bell"></i>
+                    <span class="badge">3</span>
+                </a>
+                <a href="cart.html" class="header-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="badge">1</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="search-container">
+        <div class="search-bar">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Search for books...">
+            <i class="fas fa-camera search-icon"></i>
+            <i class="fas fa-microphone search-icon"></i>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="home-page" class="page-content active">
+            <section class="genres">
+                <h2>Genres</h2>
+                <div class="genres-grid">
+                    <div class="genre-item">
+                        <i class="fas fa-book genre-icon"></i>
+                        <span>Fiction</span>
+                    </div>
+                    <div class="genre-item">
+                        <i class="fas fa-microscope genre-icon"></i>
+                        <span>Science</span>
+                    </div>
+                    <div class="genre-item">
+                        <i class="fas fa-heart genre-icon"></i>
+                        <span>Romance</span>
+                    </div>
+                    <div class="genre-item">
+                        <i class="fas fa-ghost genre-icon"></i>
+                        <span>Horror</span>
+                    </div>
+                    <div class="genre-item">
+                        <i class="fas fa-history genre-icon"></i>
+                        <span>History</span>
+                    </div>
+                    <div class="genre-item">
+                        <i class="fas fa-theater-masks genre-icon"></i>
+                        <span>Drama</span>
+                    </div>
+                    <div class="genre-item hidden-genre">
+                        <i class="fas fa-dragon genre-icon"></i>
+                        <span>Fantasy</span>
+                    </div>
+                    <div class="genre-item hidden-genre">
+                        <i class="fas fa-rocket genre-icon"></i>
+                        <span>Sci-Fi</span>
+                    </div>
+                    <div class="genre-item hidden-genre">
+                        <i class="fas fa-graduation-cap genre-icon"></i>
+                        <span>Education</span>
+                    </div>
+                    <div class="genre-item hidden-genre">
+                        <i class="fas fa-palette genre-icon"></i>
+                        <span>Art</span>
+                    </div>
+                    <div class="genre-item hidden-genre">
+                        <i class="fas fa-utensils genre-icon"></i>
+                        <span>Cooking</span>
+                    </div>
+                    <div class="genre-item hidden-genre">
+                        <i class="fas fa-child genre-icon"></i>
+                        <span>Children</span>
+                    </div>
+                    <div class="genre-item hidden-genre">
+                        <i class="fas fa-running genre-icon"></i>
+                        <span>Sports</span>
+                    </div>
+                    <div class="genre-item hidden-genre">
+                        <i class="fas fa-pray genre-icon"></i>
+                        <span>Religion</span>
+                    </div>
+                    <div class="genre-item hidden-genre">
+                        <i class="fas fa-landmark genre-icon"></i>
+                        <span>Politics</span>
+                    </div>
+                    <div class="genre-item hidden-genre">
+                        <i class="fas fa-guitar genre-icon"></i>
+                        <span>Music</span>
+                    </div>
+                </div>
+                <div class="show-more">
+                    <button onclick="toggleGenres()">Show More</button>
+                </div>
+            </section>
+
+            <section class="books">
+                <h2>Popular Books</h2>
+                <div class="books-grid">
+                    <div class="book-card">
+                        <img src="books1.jpg" alt="Book 1" class="book-image">
+                        <div class="book-info">
+                            <div class="book-title">The Great Adventure</div>
+                            <div class="book-price">$19.99</div>
+                            <button class="add-to-cart" onclick="window.location.href='cart.html'">Add to Cart</button>
+                        </div>
+                    </div>
+                    
+                    <div class="book-card">
+                        <img src="books2.jpg" alt="Book 2" class="book-image">
+                        <div class="book-info">
+                            <div class="book-title">Mystery of the Ages</div>
+                            <div class="book-price">$24.99</div>
+                            <button class="add-to-cart" onclick="window.location.href='cart.html'">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="book-card hidden-book">
+                        <img src="https://source.unsplash.com/random/211x250?book" alt="Book 11" class="book-image">
+                        <div class="book-info">
+                            <div class="book-title">The Forgotten Path</div>
+                            <div class="book-price">$17.99</div>
+                            <button class="add-to-cart" onclick="window.location.href='cart.html'">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="book-card">
+                        <img src="books3.jpg" alt="Book 3" class="book-image">
+                        <div class="book-info">
+                            <div class="book-title">The Last Chapter</div>
+                            <div class="book-price">$15.99</div>
+                            <button class="add-to-cart" onclick="window.location.href='cart.html'">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="book-card hidden-book">
+                        <img src="https://source.unsplash.com/random/203x250?book" alt="Book 4" class="book-image">
+                        <div class="book-info">
+                            <div class="book-title">The Silent Echo</div>
+                            <div class="book-price">$21.99</div>
+                            <button class="add-to-cart" onclick="window.location.href='cart.html'">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="book-card hidden-book">
+                        <img src="https://source.unsplash.com/random/204x250?book" alt="Book 5" class="book-image">
+                        <div class="book-info">
+                            <div class="book-title">Beyond the Stars</div>
+                            <div class="book-price">$18.99</div>
+                            <button class="add-to-cart" onclick="window.location.href='cart.html'">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="book-card hidden-book">
+                        <img src="https://source.unsplash.com/random/205x250?book" alt="Book 6" class="book-image">
+                        <div class="book-info">
+                            <div class="book-title">Whispers in the Wind</div>
+                            <div class="book-price">$16.99</div>
+                            <button class="add-to-cart" onclick="window.location.href='cart.html'">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="book-card hidden-book">
+                        <img src="https://source.unsplash.com/random/206x250?book" alt="Book 7" class="book-image">
+                        <div class="book-info">
+                            <div class="book-title">The Lost City</div>
+                            <div class="book-price">$22.99</div>
+                            <button class="add-to-cart" onclick="window.location.href='cart.html'">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="book-card hidden-book">
+                        <img src="https://source.unsplash.com/random/207x250?book" alt="Book 8" class="book-image">
+                        <div class="book-info">
+                            <div class="book-title">Midnight Tales</div>
+                            <div class="book-price">$20.99</div>
+                            <button class="add-to-cart" onclick="window.location.href='cart.html'">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="book-card hidden-book">
+                        <img src="https://source.unsplash.com/random/208x250?book" alt="Book 9" class="book-image">
+                        <div class="book-info">
+                            <div class="book-title">The Ancient Scroll</div>
+                            <div class="book-price">$25.99</div>
+                            <button class="add-to-cart" onclick="window.location.href='cart.html'">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="book-card hidden-book">
+                        <img src="https://source.unsplash.com/random/209x250?book" alt="Book 10" class="book-image">
+                        <div class="book-info">
+                            <div class="book-title">Ocean's Secret</div>
+                            <div class="book-price">$23.99</div>
+                            <button class="add-to-cart" onclick="window.location.href='cart.html'">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="show-more">
+                    <button onclick="toggleBooks()">Show More</button>
+                </div>
+            </section>
+        </div>
+
+        <div id="categories-page" class="page-content">
+            <h2>All Books by Category</h2>
+            <div class="books-grid">
+                <div class="book-card">
+                    <img src="https://source.unsplash.com/random/210x250?book" alt="Book 11" class="book-image">
+                    <div class="book-info">
+                        <div class="book-title">The Mountain's Secret</div>
+                        <div class="book-price">$24.99</div>
+                        <button class="add-to-cart" onclick="window.location.href='cart.html'">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="orders-page" class="page-content">
+            <h2>My Orders</h2>
+            <div class="order-card">
+                <img src="https://source.unsplash.com/random/201x250?book" alt="Book" class="order-image">
+                <div class="order-details">
+                    <h3>Mystery of the Ages</h3>
+                    <p class="order-status">Delivered on July 15, 2023</p>
+                    <p>Order ID: #ORD001</p>
+                    <p>$24.99</p>
+                </div>
+            </div>
+            <div class="order-card">
+                <img src="https://source.unsplash.com/random/202x250?book" alt="Book" class="order-image">
+                <div class="order-details">
+                    <h3>The Last Chapter</h3>
+                    <p class="order-status">Delivered on June 28, 2023</p>
+                    <p>Order ID: #ORD002</p>
+                    <p>$15.99</p>
+                </div>
+            </div>
+            <div class="order-card">
+                <img src="https://source.unsplash.com/random/203x250?book" alt="Book" class="order-image">
+                <div class="order-details">
+                    <h3>The Silent Echo</h3>
+                    <p class="order-status">Delivered on June 10, 2023</p>
+                    <p>Order ID: #ORD003</p>
+                    <p>$21.99</p>
+                </div>
+            </div>
+            <div class="order-card">
+                <img src="https://source.unsplash.com/random/204x250?book" alt="Book" class="order-image">
+                <div class="order-details">
+                    <h3>Beyond the Stars</h3>
+                    <p class="order-status">Delivered on May 25, 2023</p>
+                    <p>Order ID: #ORD004</p>
+                    <p>$18.99</p>
+                </div>
+            </div>
+            <div class="order-card">
+                <img src="https://source.unsplash.com/random/205x250?book" alt="Book" class="order-image">
+                <div class="order-details">
+                    <h3>Whispers in the Wind</h3>
+                    <p class="order-status">Delivered on May 12, 2023</p>
+                    <p>Order ID: #ORD005</p>
+                    <p>$16.99</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="offers-page" class="page-content">
+            <h2>Special Offers</h2>
+            <div class="offer-card">
+                <div class="offer-title">Summer Reading Sale!</div>
+                <div class="offer-description">Get 30% off on all Fiction books</div>
+                <div class="offer-code">SUMMER30</div>
+            </div>
+            <div class="offer-card">
+                <div class="offer-title">Buy 2 Get 1 Free</div>
+                <div class="offer-description">On all Educational books</div>
+                <div class="offer-code">B2G1FREE</div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" onclick="showPage('home')">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showPage('categories')">
+            <i class="fas fa-th-large"></i>
+            <span>Categories</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showPage('orders')">
+            <i class="fas fa-shopping-bag"></i>
+            <span>My Orders</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showPage('offers')">
+            <i class="fas fa-tag"></i>
+            <span>Offers</span>
+        </a>
+    </nav>
+
+    <script>
+        function toggleGenres() {
+            const hiddenGenres = document.querySelectorAll('.hidden-genre');
+            const button = document.querySelector('.genres .show-more button');
+            
+            let isShowing = false;
+            hiddenGenres.forEach(genre => {
+                if (genre.style.display === 'none' || !genre.style.display) {
+                    genre.style.display = 'block';
+                    isShowing = true;
+                } else {
+                    genre.style.display = 'none';
+                }
+            });
+            
+            button.textContent = isShowing ? 'Show Less' : 'Show More';
+        }
+
+        function toggleBooks() {
+            const hiddenBooks = document.querySelectorAll('.hidden-book');
+            const button = document.querySelector('.books .show-more button');
+            
+            let isShowing = false;
+            hiddenBooks.forEach(book => {
+                if (book.style.display === 'none' || !book.style.display) {
+                    book.style.display = 'block';
+                    isShowing = true;
+                } else {
+                    book.style.display = 'none';
+                }
+            });
+            
+            button.textContent = isShowing ? 'Show Less' : 'Show More';
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            document.getElementById(pageId + '-page').classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const hiddenBooks = document.querySelectorAll('.hidden-book');
+            const hiddenGenres = document.querySelectorAll('.hidden-genre');
+            
+            hiddenBooks.forEach(book => {
+                book.style.display = 'none';
+            });
+            
+            hiddenGenres.forEach(genre => {
+                genre.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

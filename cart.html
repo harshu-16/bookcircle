@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - Book Circle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: #f3f4f6;
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: white;
+            padding: 1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            margin: 0;
+            color: #1a365d;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .cart-item {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .cart-item img {
+            width: 100px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 0.25rem;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-price {
+            color: #2563eb;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .delivery-date {
+            color: #4a5568;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .price-details {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .total {
+            border-top: 1px solid #e2e8f0;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            font-weight: 600;
+        }
+
+        .continue-button {
+            width: 100%;
+            padding: 1rem;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .continue-button:hover {
+            background-color: #1d4ed8;
+        }
+
+        .payment-methods {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .payment-method {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+        }
+
+        .payment-method:hover {
+            border-color: #2563eb;
+        }
+
+        .payment-method i {
+            font-size: 1.5rem;
+            color: #2563eb;
+        }
+
+        .order-success {
+            text-align: center;
+            padding: 2rem;
+            display: none;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: #10b981;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Review Order</h1>
+    </header>
+
+    <div class="container">
+        <div class="cart-item">
+            <img src="books1.jpg" alt="Book">
+            <div class="item-details">
+                <div class="item-title">The Great Adventure</div>
+                <div class="item-price">$19.99</div>
+                <div class="delivery-date">
+                    <i class="fas fa-truck"></i>
+                    Estimated delivery: July 25-27
+                </div>
+            </div>
+        </div>
+
+        <div class="price-details">
+            <h3>Price Details</h3>
+            <div class="price-row">
+                <span>Price (1 item)</span>
+                <span>$19.99</span>
+            </div>
+            <div class="price-row">
+                <span>Delivery Charges</span>
+                <span>Free</span>
+            </div>
+            <div class="price-row total">
+                <span>Order Total</span>
+                <span>$19.99</span>
+            </div>
+        </div>
+
+        <button class="continue-button" onclick="showPaymentMethods()">Continue</button>
+
+        <div class="payment-methods" id="paymentMethods">
+            <h3>Select Payment Method</h3>
+            <div class="payment-method" onclick="placeOrder()">
+                <i class="fas fa-money-bill-wave"></i>
+                <span>Cash on Delivery</span>
+            </div>
+            <div class="payment-method" onclick="placeOrder()">
+                <i class="fas fa-mobile-alt"></i>
+                <span>UPI</span>
+            </div>
+            <div class="payment-method" onclick="placeOrder()">
+                <i class="fab fa-google-pay"></i>
+                <span>Google Pay</span>
+            </div>
+            <div class="payment-method" onclick="placeOrder()">
+                <i class="fas fa-money-check"></i>
+                <span>Phone Pay</span>
+            </div>
+        </div>
+
+        <div class="order-success" id="orderSuccess">
+            <i class="fas fa-check-circle success-icon"></i>
+            <h2>Order Placed Successfully!</h2>
+            <p>Thank you for shopping with Book Circle</p>
+            <button class="continue-button" onclick="window.location.href='dashboard.html'">
+                Continue Shopping
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function showPaymentMethods() {
+            document.getElementById('paymentMethods').style.display = 'block';
+            document.querySelector('.continue-button').style.display = 'none';
+        }
+
+        function placeOrder() {
+            document.getElementById('paymentMethods').style.display = 'none';
+            document.getElementById('orderSuccess').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
